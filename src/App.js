@@ -3,25 +3,23 @@ import './App.css';
 import MovieList from './components/movie-list';
 import MovieDetails from './components/movie-details';
 import MovieForm from './components/movie-form';
-import { API } from './api-service'
 import { useCookies } from 'react-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilm } from '@fortawesome/free-solid-svg-icons'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { useFetch } from './hooks/useFetch'
 
 function App() {
 
   const [movies, setMovie] = useState([])
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [editedMovie, setEditedMovie] = useState(null)
-
   const [token, setToken, deleteToken] = useCookies(['mr-token'])
+  const [data, loading, error] = useFetch()
 
   useEffect(() => {
-    API.getMovie()
-    .then(resp => setMovie(resp)) 
-    .catch(error => console.log(error))
-  }, [])
+    setMovie(data)
+  }, [data])
 
   useEffect(() => {
     console.log(token)
@@ -66,6 +64,9 @@ function App() {
   const logoutUser = () => {
     deleteToken(['mr-token'])
   }
+
+  if(loading) return <h1>Loading...</h1>
+  if(error) return <h1>Error loading movies..</h1>
 
   return (
     <div className="App">

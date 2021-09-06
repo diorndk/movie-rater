@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { useCookies } from 'react-cookie'
+import { API } from '../api-service'
 
 function MovieDetails(props) {
 
@@ -15,29 +16,13 @@ function MovieDetails(props) {
     }
 
     const rateClicked = rate => evt => {
-        fetch(`http://127.0.0.1:8000/api/movies/${mov.id}/rate_movie/`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Token ${token['mr-token']}`
-            },
-            body: JSON.stringify({
-                stars: rate + 1
-            })
-        })
+        API.rateMovie(mov.id, rate, token['mr-token'])
         .then(() => getdetails()) 
         .catch(error => console.log(error))
     }
     
     const getdetails = () => {
-        fetch(`http://127.0.0.1:8000/api/movies/${mov.id}/`, {
-            method: 'GET',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Token ${token['mr-token']}`
-            }
-        })
-        .then(resp => resp.json())
+        API.getMovieDetail(mov.id, token['mr-token'])
         .then(resp => props.updateMovie(resp)) 
         .catch(error => console.log(error))
     }
