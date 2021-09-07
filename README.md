@@ -1,2 +1,2 @@
 # movie-rater
-Exercise project build Movie Rater App in ReactJs
+Exercise project build Movie Rater App with ReactJs
